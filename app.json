@@ -2,6 +2,7 @@
   "expo": {
     "name": "ZaiqaXpress",
     "slug": "ZaiqaXpress",
+    "scheme": "zaiqaxpress",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +23,20 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "Sen-Regular": "./assets/fonts/Sen-Regular.ttf",
+          "Sen-Medium": "./assets/fonts/Sen-Medium.ttf",
+          "Sen-SemiBold": "./assets/fonts/Sen-SemiBold.ttf",
+          "Sen-Bold": "./assets/fonts/Sen-Bold.ttf",
+          "Sen-ExtraBold": "./assets/fonts/Sen-ExtraBold.ttf"
+        }
+      ],
+      "expo-router"
+    ]
+
   }
 }

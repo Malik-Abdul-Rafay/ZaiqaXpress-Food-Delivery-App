@@ -4,7 +4,6 @@ import ResturantsList from '../components/ResturantsList'
 import Greeting from '../components/Greeting'
 import SearchBar from '../components/SearchBar'
 import CategorySelector from '../components/CategorySelector'
-import RestaurantsData from '../../DummyData/RestaurantsData'
 
 
 const HomeScreen = () => {
@@ -14,7 +13,7 @@ const HomeScreen = () => {
         <SearchBar />
         <Greeting />
         <CategorySelector />
-        <ResturantsList Heading={'Open Restaurants'} RestaurantsData={RestaurantsData} />
+        <ResturantsList Heading={'Open Restaurants'}/>
       </View>
     </ScrollView>
   );

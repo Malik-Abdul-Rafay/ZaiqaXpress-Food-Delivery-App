@@ -1,13 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { Link } from 'expo-router'; // Import Link for navigation
 import Icon1 from 'react-native-vector-icons/Octicons';
 import Icon2 from 'react-native-vector-icons/Entypo';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
-import { useFocusEffect } from '@react-navigation/native'; // Import this for handling navigation focus
+import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
 
-const RestaurantList = ({ Heading, RestaurantsData }) => {
+const RestaurantList = ({ Heading, }) => {
+  const [restaurantData, setRestaurantData] = useState([])
+  useEffect(() => {
+    axios
+      .get("http://192.168.0.104:3000/restaurants")
+      .then((res) => {
+        setRestaurantData(res.data)
+        console.log(res.data);
+
+      })
+  }, [])
   return (
     <View style={styles.RestaurantListContainer}>
       {Heading && (
@@ -21,7 +32,7 @@ const RestaurantList = ({ Heading, RestaurantsData }) => {
       )}
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {RestaurantsData.map((item, index) => (
+        {restaurantData.map((item, index) => (
           <AnimatedCard item={item} index={index} key={item.id} />
         ))}
       </ScrollView>
@@ -29,22 +40,21 @@ const RestaurantList = ({ Heading, RestaurantsData }) => {
   );
 };
 
-// Separate component for animated card
-const AnimatedCard = ({ item, index }) => {
-  const translateY = useSharedValue(30);  // Initial position
-  const opacity = useSharedValue(0);      // Initial opacity
 
-  // Reset animation values on focus
+const AnimatedCard = ({ item, index }) => {
+  const translateY = useSharedValue(30);
+  const opacity = useSharedValue(0);
+
   useFocusEffect(
     React.useCallback(() => {
-      translateY.value = 60; // Reset to initial position
-      opacity.value = 0;     // Reset to initial opacity
+      translateY.value = 60;
+      opacity.value = 0;
       translateY.value = withTiming(0, { duration: 100 });
       opacity.value = withTiming(1, { duration: 400 });
     }, [])
   );
 
-  // Define the animated style
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ translateY: translateY.value }],
@@ -54,24 +64,33 @@ const AnimatedCard = ({ item, index }) => {
 
   return (
     <Animated.View style={[styles.card, animatedStyle]}>
-      <Link href={`/(restaurantDetail)/${item.id}`} asChild>
+      <Link href={`/(RestaurantsDetail)/${item.id}`} asChild>
+
         <TouchableOpacity style={styles.card} activeOpacity={0.8}>
           <Image source={{ uri: item.img }} style={styles.image} />
           <View style={styles.infoContainer}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.subtitle}>{item.subtitle}</Text>
+            <Text style={styles.title}>{item.name}</Text>
+            <View style={styles.subtitle}>
+              {(item.categories).map((category, index, array) => (
+                <Text style={styles.subtitleText} key={index}>
+                  {category}{index < array.length - 1 ? ', ' : ''}
+                </Text>
+              ))}
+            </View>
+
+
             <View style={styles.iconRow}>
               <View style={styles.iconWithText}>
                 <Icon1 name="star" size={22} color="#FF642F" />
-                <Text style={styles.iconText}>{item.reviewStar}</Text>
+                <Text style={styles.iconText}>{item.reviews}</Text>
               </View>
               <View style={styles.iconWithText}>
                 <Icon3 name="truck-fast-outline" size={22} color="#FF642F" />
-                <Text style={styles.iconText}>{item.deliveryCharges}</Text>
+                <Text style={styles.iconText}>{item.deliveryPrice}</Text>
               </View>
               <View style={styles.iconWithText}>
                 <Icon3 name="clock-time-three-outline" size={22} color="#FF642F" />
-                <Text style={styles.iconText}>{item.time}</Text>
+                <Text style={styles.iconText}>{item.deliveryTiming}</Text>
               </View>
             </View>
           </View>
@@ -124,10 +143,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Sen-SemiBold',
   },
   subtitle: {
+    flexDirection: "row",
+    gap: 5
+  },
+  subtitleText: {
     fontSize: 14,
-    color: '#777',
-    marginVertical: 4,
     fontFamily: 'Sen-Regular',
+    color: '#777',
   },
   iconRow: {
     flexDirection: 'row',

@@ -8,7 +8,7 @@ const CategorySelectorScreen = () => {
   return (
     <View>
       <ScrollView>
-        <ItemList Heading={'Popular Burger'} ListData={ItemData}/>
+        <ItemList Heading={'Our Foods'} />
         </ScrollView>
     </View>
   )

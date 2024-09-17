@@ -1,17 +1,40 @@
-import React, { useCallback, useEffect } from 'react';
+import React,{useState, useEffect, useCallback} from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
 import Icon1 from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
-import Animated, { 
-  useSharedValue, 
-  useAnimatedStyle, 
-  withSpring, 
-  withDelay 
-} from 'react-native-reanimated';
-import { useFocusEffect } from '@react-navigation/native';
+import { useLocalSearchParams } from 'expo-router';
+import axios from 'axios'
+import { useFocusEffect } from 'expo-router';
+import Animated, {useSharedValue, useAnimatedStyle, withSpring, withDelay} from 'react-native-reanimated';
 
-const ItemList = ({ Heading, ListData }) => {
+
+const ItemList = ({ Heading, item  }) => {
+  const { id } = useLocalSearchParams(); 
+  const [itemData, setItemData] = useState([])
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true; 
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(`http://192.168.0.104:3000/restaurants/${id}`);
+          if (isActive) {
+            setItemData(res.data.items); 
+          }
+        } catch (error) {
+          console.log('Error fetching data:', error);
+        }
+};
+
+      fetchData();
+
+      return () => {
+        isActive = false; // Cleanup when screen loses focus or unmounts
+        setItemData([]); // Clear data when screen is no longer focused
+      };
+    }, [id])
+  );
+
   return (
     <View style={styles.popularSection}>
       {Heading && (
@@ -24,50 +47,33 @@ const ItemList = ({ Heading, ListData }) => {
         </View>
       )}
       <View style={styles.burgerList}>
-        {ListData.map((item, index) => (
-          <AnimatedItem key={index} index={index} item={item} />
-        ))}
-      </View>
-    </View>
-  );
-};
+      {itemData.map((item)=>(
+      <View key={item.id} style={styles.burgerItemContainer}>
+      <Link href={`/(ItemDetail)/${item.id}`} asChild>
 
-// AnimatedItem component for each list item
-const AnimatedItem = ({ index, item }) => {
-  const scale = useSharedValue(0.8); // Starting scale
-  const opacity = useSharedValue(0); // Starting opacity
-
-  const startAnimation = useCallback(() => {
-    scale.value = withDelay(index * 100, withSpring(1, { damping: 2 }));
-    opacity.value = withDelay(index * 100, withSpring(1, { damping: 2 }));
-  }, [index]);
-
-  useFocusEffect(startAnimation); // Trigger animation on screen focus
-
-  // Animated styles
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
-
-  return (
-    <Animated.View style={[styles.burgerItemContainer, animatedStyle]}>
-      <Link href={`/(restaurantDetail)/food/${item.id}`} asChild>
         <TouchableOpacity style={styles.burgerItem} activeOpacity={0.8}>
           <View style={styles.burgerImageContainer}>
             <Image style={styles.burgerImage} source={{ uri: item.img }} />
           </View>
-          <Text style={styles.burgerName}>{item.name}</Text>
-          <Text style={styles.burgerRestaurant}>{item.restaurant}</Text>
-          <Text style={styles.burgerPrice}>${item.price}</Text>
+          <Text style={styles.burgerName} numberOfLines={1} ellipsizeMode="tail">
+  {item.name}
+</Text>
+<Text style={styles.burgerRestaurant} numberOfLines={1} ellipsizeMode="tail">
+  {item.restaurant}
+</Text>
+          <Text style={styles.burgerPrice}>{item.price}</Text>
           <TouchableOpacity style={styles.addButton}>
             <Icon2 name="add" size={22} color="#fff" />
           </TouchableOpacity>
         </TouchableOpacity>
       </Link>
-    </Animated.View>
+    </View>
+    ))}
+      </View>
+    </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   popularSection: {
@@ -134,6 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#7f8c8d',
     fontFamily: 'Sen-Medium',
+    marginRight: 34
   },
   burgerPrice: {
     fontSize: 18,

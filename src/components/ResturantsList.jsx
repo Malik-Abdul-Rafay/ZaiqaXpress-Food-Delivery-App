@@ -12,7 +12,7 @@ const RestaurantList = ({ Heading, }) => {
   const [restaurantData, setRestaurantData] = useState([])
   useEffect(() => {
     axios
-      .get("http://192.168.0.104:3000/restaurants")
+      .get("http://192.168.0.103:3000/restaurants")
       .then((res) => {
         setRestaurantData(res.data)
         console.log(res.data);

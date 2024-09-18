@@ -3,8 +3,12 @@ import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, ScrollView, 
 import Icon1 from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/Entypo';
+import { useLocalSearchParams } from 'expo-router';
+import axios from 'axios';
 
 const FoodDetailsScreen = () => {
+  const [detailData, setDetailData] = useState(null);
+  const { id } = useLocalSearchParams();
   const [size, setSize] = useState('14');
   const [quantity, setQuantity] = useState(2);
 
@@ -12,6 +16,20 @@ const FoodDetailsScreen = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideInAnim = useRef(new Animated.Value(-50)).current;
   const slideUpAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    // Fetch data from API
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://192.168.0.103:4000/items/${id}`);
+        setDetailData(res.data);
+      } catch (err) {
+        console.log("Error Fetching Data", err);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   useEffect(() => {
     // Fade-in animation
@@ -36,50 +54,43 @@ const FoodDetailsScreen = () => {
     }).start();
   }, [fadeAnim, slideInAnim, slideUpAnim]);
 
-  const ingredients = [
-    { id: 1, name: 'Tomato' },
-    { id: 2, name: 'Cheese' },
-    { id: 3, name: 'Onion' },
-    { id: 6, name: 'Mushroom' },
-    { id: 7, name: 'Tomato' },
-    { id: 8, name: 'Cheese' },
-    { id: 9, name: 'Onion' },
-    { id: 10, name: 'Mushroom' },
-  ];
+  if (!detailData) return <Text>Loading...</Text>;
+
+  const { name, price, description, rating, delivery_fee, delivery_time, size: sizes, ingredients, img, restaurant } = detailData;
 
   return (
     <ScrollView style={styles.container}>
       <Animated.View style={[styles.imageContainer, { opacity: fadeAnim }]}>
-        <Image style={styles.image} source={{ uri: 'https://img.freepik.com/premium-photo/front-view-delicious-meat-cheeseburgers-with-tomatoes-french-fries-dark-background-dish-fast-food-toast-snack-dinner-meal_140725-156346.jpg' }} />
+        <Image style={styles.image} source={{ uri: img }} />
       </Animated.View>
       <Animated.View style={[styles.infoContainer, { transform: [{ translateY: slideInAnim }] }]}>
         <View style={styles.containerResturantName}>
           <TouchableOpacity style={styles.buttonResturantName}>
-            <Text style={styles.textResturantName}>Uttora Burger House</Text>
+            <Text style={styles.textResturantName}>{restaurant}</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.foodName}>Food Calzone European</Text>
+        <Text style={styles.foodName}>{name}</Text>
         <Text style={styles.foodDescription}>
-          Prosciutto e funghi is a food variety that is topped with tomato sauce.
+          {description}
         </Text>
         <View style={styles.iconRow}>
           <View style={styles.iconWithText}>
             <Icon2 name="star" size={23} color="#FF642F" />
-            <Text style={styles.iconText}>4.7</Text>
+            <Text style={styles.iconText}>{rating}</Text>
           </View>
           <View style={styles.iconWithText}>
             <Icon2 name="bicycle" size={23} color="#FF642F" />
-            <Text style={styles.iconText}>Rs.30</Text>
+            <Text style={styles.iconText}>{delivery_fee}</Text>
           </View>
           <View style={styles.iconWithText}>
             <Icon2 name="time-outline" size={23} color="#FF642F" />
-            <Text style={styles.iconText}>20 min</Text>
+            <Text style={styles.iconText}>{delivery_time}</Text>
           </View>
         </View>
         <View style={styles.sizeContainer}>
           <Text style={styles.sizeTitle}>SIZE:</Text>
           <View style={styles.sizes}>
-            {['10', '14', '16'].map((s) => (
+            {sizes.map((s) => (
               <TouchableOpacity
                 key={s}
                 style={[styles.sizeButton, size === s && styles.sizeButtonActive]}
@@ -108,7 +119,7 @@ const FoodDetailsScreen = () => {
 
       <Animated.View style={[styles.priceAndAddToCartContainer, { transform: [{ translateY: slideUpAnim }] }]}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>$32</Text>
+          <Text style={styles.price}>{price}</Text>
           <View style={styles.quantityContainer}>
             <TouchableOpacity style={styles.buttonContainer} onPress={() => setQuantity(Math.max(1, quantity - 1))}>
               <Icon3 name="minus" size={25} color="#fff" />

@@ -52,7 +52,7 @@ const ProfileScreen = () => {
               },
             ]}
           >
-            <TouchableOpacity style={styles.menuItemTouchable}>
+            <TouchableOpacity style={styles.menuItemTouchable} >
               <View style={styles.menuIcon}>
                 <Icon name={item.icon} size={24} color={item.color} />
               </View>

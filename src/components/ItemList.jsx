@@ -16,7 +16,7 @@ const ItemList = ({ Heading }) => {
       let isActive = true;
       const fetchData = async () => {
         try {
-          const res = await axios.get(`http://192.168.0.103:3000/restaurants/${id}`);
+          const res = await axios.get(`http://192.168.0.105:3000/restaurants/${id}`);
           if (isActive) {
             setItemData(res.data.items); 
           }
@@ -67,7 +67,7 @@ const ItemList = ({ Heading }) => {
               <Text style={styles.burgerRestaurant} numberOfLines={1} ellipsizeMode="tail">
                 {item.restaurant}
               </Text>
-              <Text style={styles.burgerPrice}>{item.price}</Text>
+              <Text style={styles.burgerPrice}>₹ {item.price}</Text>
               <TouchableOpacity style={styles.addButton}>
                 <Icon2 name="add" size={22} color="#fff" />
               </TouchableOpacity>

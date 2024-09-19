@@ -1,16 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, ScrollView, Animated } from 'react-native';
 import Icon1 from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/Entypo';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
+import { CartContext } from '../context/CartContext';
 
 const FoodDetailsScreen = () => {
   const [detailData, setDetailData] = useState(null);
   const { id } = useLocalSearchParams();
   const [size, setSize] = useState('14');
   const [quantity, setQuantity] = useState(2);
+  const {addItemToCart, isItemAdded,lessQuantityFromCart} = useContext(CartContext);
+  
 
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -21,7 +24,7 @@ const FoodDetailsScreen = () => {
     // Fetch data from API
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://192.168.0.103:4000/items/${id}`);
+        const res = await axios.get(`http://192.168.0.105:4000/items/${id}`);
         setDetailData(res.data);
       } catch (err) {
         console.log("Error Fetching Data", err);
@@ -119,19 +122,19 @@ const FoodDetailsScreen = () => {
 
       <Animated.View style={[styles.priceAndAddToCartContainer, { transform: [{ translateY: slideUpAnim }] }]}>
         <View style={styles.priceContainer}>
-          <Text style={styles.price}>{price}</Text>
+          <Text style={styles.price}>₹ {price}</Text>
           <View style={styles.quantityContainer}>
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => setQuantity(Math.max(1, quantity - 1))}>
-              <Icon3 name="minus" size={25} color="#fff" />
-            </TouchableOpacity>
-            <Text style={styles.quantityText}>{quantity}</Text>
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => setQuantity(quantity + 1)}>
-              <Icon3 name="plus" size={25} color="#fff" />
-            </TouchableOpacity>
-          </View>
+                    <TouchableOpacity disabled={detailData.id.quantity <= 1} onPress={()=>lessQuantityFromCart(detailData.id)} style={styles.buttonContainer}>
+                      <Icon1 name="minus" size={18} color="#fff" />
+                    </TouchableOpacity>
+                    <Text style={styles.quantityText}>{isItemAdded(detailData.id).quantity}</Text>
+                    <TouchableOpacity onPress={()=>addItemToCart(detailData)} style={styles.buttonContainer}>
+                      <Icon1 name="plus" size={18} color="#fff" />
+                    </TouchableOpacity>
+                  </View>
         </View>
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText}>ADD TO CART</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => addItemToCart(detailData)}>
+          <Text style={styles.addButtonText}>{isItemAdded(detailData.id) ? `Added (${isItemAdded(detailData.id).quantity})`: "ADD TO CART"}</Text>
         </TouchableOpacity>
       </Animated.View>
     </ScrollView>

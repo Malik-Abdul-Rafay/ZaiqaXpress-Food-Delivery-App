@@ -12,7 +12,7 @@ const RestaurantList = ({ Heading, }) => {
   const [restaurantData, setRestaurantData] = useState([])
   useEffect(() => {
     axios
-      .get("http://192.168.0.103:3000/restaurants")
+      .get("http://192.168.0.105:3000/restaurants")
       .then((res) => {
         setRestaurantData(res.data)
         console.log(res.data);
@@ -86,7 +86,7 @@ const AnimatedCard = ({ item, index }) => {
               </View>
               <View style={styles.iconWithText}>
                 <Icon3 name="truck-fast-outline" size={22} color="#FF642F" />
-                <Text style={styles.iconText}>{item.deliveryPrice}</Text>
+                <Text style={styles.iconText}>₹ {item.deliveryPrice}</Text>
               </View>
               <View style={styles.iconWithText}>
                 <Icon3 name="clock-time-three-outline" size={22} color="#FF642F" />

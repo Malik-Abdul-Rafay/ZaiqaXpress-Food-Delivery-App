@@ -1,113 +1,56 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image, ScrollView, Animated } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image, ScrollView } from 'react-native';
 import Icon1 from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import { CartContext } from '../context/CartContext';
 
 export default function CartScreen() {
-  const [quantity, setQuantity] = React.useState(2);
-  const [address, setAddress] = React.useState('2118 Thornridge Cir. Syracuse');
-  const [cartItems, setCartItems] = React.useState([
-    { 
-      id: 1, 
-      name: 'Burger Deluxe', 
-      price: '$32', 
-      size: '14"', 
-      imageUri: 'https://cdn.usarestaurants.info/assets/uploads/f812394385526df240583ac3881f25e9_-united-states-florida-broward-county-pompano-beach-happy-rooster-restaurant-954-532-0803htm.jpg' 
-    },
-    { 
-      id: 2, 
-      name: 'Pizza Calzone European', 
-      price: '$32', 
-      size: '14"', 
-      imageUri: 'https://cdn.pixabay.com/photo/2024/04/23/09/32/ai-generated-8714516_1280.jpg' 
-    }
-  ]);
+  const [quantity, setQuantity] = useState(2);
+  const [address, setAddress] = useState('2118 Thornridge Cir. Syracuse');
+  const { cartItem,removeItemFromCart, addItemToCart, lessQuantityFromCart } = useContext(CartContext);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(cartItems.map(() => new Animated.Value(-100))).current;
-  const footerAnim = useRef(new Animated.Value(100)).current;
+  const totalAmount = cartItem.reduce((total, obj) =>  total + obj.quantity * obj.price , 0)
+  const totalQuantity = cartItem.reduce((total, obj) =>  total + obj.quantity , 0)
 
-  useEffect(() => {
-    // Fade-in animation for cart items
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
 
-    // Slide-in animations for cart items
-    const itemAnimations = cartItems.map((_, index) =>
-      Animated.timing(slideAnim[index], {
-        toValue: 0,
-        duration: 500,
-        delay: index * 100,
-        useNativeDriver: true,
-      })
-    );
-
-    Animated.stagger(100, itemAnimations).start();
-
-    // Slide-up animation for footer
-    Animated.timing(footerAnim, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  const increaseQuantity = () => setQuantity(quantity + 1);
-  const decreaseQuantity = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
-
-  const deleteItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.cartItemContainer}>
         <View>
           {/* Cart Items */}
-          {cartItems.map((item, index) => (
-            <Animated.View
-              key={item.id}
-              style={[
-                styles.cartItem,
-                {
-                  transform: [{ translateX: slideAnim[index] }],
-                  opacity: fadeAnim,
-                },
-              ]}
-            >
+          {cartItem.map((item) => (
+            <View key={item.id} style={styles.cartItem}>
               <Image source={{ uri: item.imageUri }} style={styles.imagePlaceholder} />
               <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <View style={styles.itemDetailsBottom}>
                   <View>
-                    <Text style={styles.itemPrice}>{item.price}</Text>
+                    <Text style={styles.itemPrice}>₹ {item.price}</Text>
                     <Text style={styles.itemSize}>{item.size}</Text>
                   </View>
 
                   <View style={styles.quantityControl}>
-                    <TouchableOpacity onPress={decreaseQuantity} style={styles.quantityButton}>
+                    <TouchableOpacity disabled={item.quantity <= 1} onPress={()=>lessQuantityFromCart(item.id)} style={styles.quantityButton}>
                       <Icon1 name="minus" size={18} color="#fff" />
                     </TouchableOpacity>
-                    <Text style={styles.quantityNumber}>{quantity}</Text>
-                    <TouchableOpacity onPress={increaseQuantity} style={styles.quantityButton}>
+                    <Text style={styles.quantityNumber}>{item.quantity}</Text>
+                    <TouchableOpacity onPress={()=>addItemToCart(item)} style={styles.quantityButton}>
                       <Icon1 name="plus" size={18} color="#fff" />
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
-              <TouchableOpacity onPress={() => deleteItem(item.id)} style={styles.deleteButton}>
+              <TouchableOpacity onPress={() => removeItemFromCart(item.id)} style={styles.deleteButton}>
                 <Icon2 name="delete" size={20} color="#FF0000" />
               </TouchableOpacity>
-            </Animated.View>
+            </View>
           ))}
         </View>
       </ScrollView>
 
       {/* Bottom Footer */}
-      <Animated.View style={[styles.bottomFooter, { transform: [{ translateY: footerAnim }] }]}>
+      <View style={styles.bottomFooter}>
         {/* Delivery Address Section */}
         <View style={styles.addressSection}>
           <View style={styles.addressHeader}>
@@ -126,14 +69,18 @@ export default function CartScreen() {
         {/* Total and Place Order Section */}
         <View style={styles.footer}>
           <View style={styles.totalContainer}>
-            <Text style={styles.totalLabel}>TOTAL:</Text>
-            <Text style={styles.totalAmount}>$96</Text>
+            <Text style={styles.totalLabel}>TOTAL QUANTITY:</Text>
+            <Text style={styles.totalAmount}>{totalQuantity}</Text>
+          </View>
+          <View style={styles.totalContainer}>
+            <Text style={styles.totalLabel}>TOTAL AMOUNT:</Text>
+            <Text style={styles.totalAmount}>₹ {Math.round(totalAmount)}</Text>
           </View>
           <TouchableOpacity style={styles.placeOrderButton}>
             <Text style={styles.placeOrderText}>PLACE ORDER</Text>
           </TouchableOpacity>
         </View>
-      </Animated.View>
+      </View>
     </View>
   );
 }
@@ -223,13 +170,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ECF0F4',
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 14,
+    paddingBottom: 10,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     elevation: 5, // Optional: for shadow effect on Android
   },
   addressSection: {
-    marginVertical: 16,
+    marginTop: 8,
   },
   addressHeader: {
     flexDirection: 'row',
@@ -237,7 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   addressLabel: {
-    fontSize: 15,
+    fontSize: 17,
     color: '#000',
     fontFamily: 'Sen-Bold',
   },
@@ -256,24 +203,26 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   footer: {
-    paddingTop: 16,
+    // paddingTop: 16,
     alignItems: 'center',
   },
   totalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 15,
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 16,
-    gap: 15,
+    borderBottomWidth:2,
+    borderBottomColor: 'white',
+    paddingVertical: 12
   },
   totalLabel: {
-    fontSize: 18,
+    fontSize: 17,
     color: '#000',
     fontFamily: 'Sen-Bold',
   },
   totalAmount: {
-    fontSize: 26,
+    fontSize: 22,
     color: '#000',
     fontFamily: 'Sen-Bold',
   },
@@ -282,6 +231,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 8,
+    marginTop: 15
   },
   placeOrderText: {
     color: '#FFF',

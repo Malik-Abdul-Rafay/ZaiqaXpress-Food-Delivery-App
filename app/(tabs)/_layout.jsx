@@ -43,14 +43,19 @@ const _layout = () => {
           <Ionicons name={focused ? "cart" : "cart-outline"} size={25} color={color} />
         ),
       }} />
-      <Tabs.Screen name='List' options={{
-        header: () => <BackHeader title={'Favourites'} />,
-        tabBarIcon: ({ focused, color }) => (
-          <Ionicons name={focused ? "heart" : "heart-outline"} size={25} color={color} />
-        ),
-      }} />
-      <Tabs.Screen name='Profile' options={{
-        header: () => <BackHeader title={'Profile'} />,
+<Tabs.Screen
+  name='Orders'
+  options={{
+    header: () => <BackHeader title={'Orders'} />,
+    tabBarIcon: ({ focused, color }) => (
+      <Ionicons name={focused ? "receipt" : "receipt-outline"} size={25} color={color} />
+    ),
+  }}
+/>
+
+      <Tabs.Screen name='(Profile)' options={{
+          headerShown: false,
+        // header: () => <BackHeader title={'Profile'} />,
         tabBarIcon: ({ focused, color }) => (
           <FontAwesome name={focused ? "user-circle" : "user-circle-o"} size={25} color={color} />
         ),

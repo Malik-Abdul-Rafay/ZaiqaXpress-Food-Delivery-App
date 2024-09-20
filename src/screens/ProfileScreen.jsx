@@ -1,3 +1,4 @@
+import { Link, router } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -52,7 +53,7 @@ const ProfileScreen = () => {
               },
             ]}
           >
-            <TouchableOpacity style={styles.menuItemTouchable} >
+            <TouchableOpacity style={styles.menuItemTouchable} onPress={()=> router.navigate(`/${item.onclick}`)}>
               <View style={styles.menuIcon}>
                 <Icon name={item.icon} size={24} color={item.color} />
               </View>
@@ -67,17 +68,18 @@ const ProfileScreen = () => {
 };
 
 const menuItems = [
-  { label: 'Personal Info', icon: 'person', color: '#FF6B6B' },
-  { label: 'Addresses', icon: 'location-on', color: '#4ECDC4' },
-  { label: 'Cart', icon: 'shopping-cart', color: '#1A535C' },
-  { label: 'Favourite', icon: 'favorite', color: '#FF6B6B' },
-  { label: 'Notifications', icon: 'notifications', color: '#FF6B6B' },
-  { label: 'Payment Method', icon: 'credit-card', color: '#FFE66D' },
-  { label: 'FAQs', icon: 'help', color: '#FF6B6B' },
-  { label: 'User Reviews', icon: 'rate-review', color: '#4ECDC4' },
-  { label: 'Settings', icon: 'settings', color: '#FF6B6B' },
-  { label: 'Log Out', icon: 'exit-to-app', color: '#FF6B6B' },
+  { label: 'Personal Info', icon: 'person', color: '#FF6B6B', onclick: 'PersonalInfo' },
+  { label: 'Addresses', icon: 'location-on', color: '#4ECDC4', onclick: 'Addresses' },
+  { label: 'Cart', icon: 'shopping-cart', color: '#1A535C', onclick: 'Cart' },
+  { label: 'Favourite', icon: 'favorite', color: '#FF6B6B', onclick: 'Favourite' },
+  { label: 'Notifications', icon: 'notifications', color: '#FF6B6B', onclick: 'Notifications' },
+  { label: 'Payment Method', icon: 'credit-card', color: '#FFE66D', onclick: 'PaymentMethod' },
+  { label: 'FAQs', icon: 'help', color: '#FF6B6B', onclick: 'FAQs' },
+  { label: 'User Reviews', icon: 'rate-review', color: '#4ECDC4', onclick: 'UserReviews' },
+  { label: 'Settings', icon: 'settings', color: '#FF6B6B', onclick: 'Settings' },
+  { label: 'Log Out', icon: 'exit-to-app', color: '#FF6B6B', onclick: 'LogOut' },
 ];
+
 
 const styles = StyleSheet.create({
   container: {

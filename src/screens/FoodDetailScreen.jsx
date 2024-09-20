@@ -121,22 +121,26 @@ const FoodDetailsScreen = () => {
       </Animated.View>
 
       <Animated.View style={[styles.priceAndAddToCartContainer, { transform: [{ translateY: slideUpAnim }] }]}>
-        <View style={styles.priceContainer}>
-          <Text style={styles.price}>₹ {price}</Text>
-          <View style={styles.quantityContainer}>
-                    <TouchableOpacity disabled={detailData.id.quantity <= 1} onPress={()=>lessQuantityFromCart(detailData.id)} style={styles.buttonContainer}>
-                      <Icon1 name="minus" size={18} color="#fff" />
-                    </TouchableOpacity>
-                    <Text style={styles.quantityText}>{isItemAdded(detailData.id).quantity}</Text>
-                    <TouchableOpacity onPress={()=>addItemToCart(detailData)} style={styles.buttonContainer}>
-                      <Icon1 name="plus" size={18} color="#fff" />
-                    </TouchableOpacity>
-                  </View>
-        </View>
-        <TouchableOpacity style={styles.addButton} onPress={() => addItemToCart(detailData)}>
-          <Text style={styles.addButtonText}>{isItemAdded(detailData.id) ? `Added (${isItemAdded(detailData.id).quantity})`: "ADD TO CART"}</Text>
-        </TouchableOpacity>
-      </Animated.View>
+  <View style={styles.priceContainer}>
+    <Text style={styles.price}>₹ {price}</Text>
+    <View style={styles.quantityContainer}>
+    {/* <TouchableOpacity disabled={isItemAdded(detailData.id)?.quantity <= 1} onPress={() => lessQuantityFromCart(detailData.id)} style={styles.buttonContainer}> */}
+      <TouchableOpacity disabled={isItemAdded(detailData.id)?.quantity <= 1} onPress={() => lessQuantityFromCart(detailData.id)} style={styles.buttonContainer}>
+        <Icon1 name="minus" size={18} color="#fff" />
+      </TouchableOpacity>
+      <Text style={styles.quantityText}>{isItemAdded(detailData.id)?.quantity || 0}</Text>
+      <TouchableOpacity onPress={() => addItemToCart(detailData)} style={styles.buttonContainer}>
+        <Icon1 name="plus" size={18} color="#fff" />
+      </TouchableOpacity>
+    </View>
+  </View>
+  <TouchableOpacity style={styles.addButton} onPress={() => addItemToCart(detailData)}>
+    <Text style={styles.addButtonText}>
+      {isItemAdded(detailData.id) ? `Added (${isItemAdded(detailData.id).quantity})` : "ADD TO CART"}
+    </Text>
+  </TouchableOpacity>
+</Animated.View>
+
     </ScrollView>
   );
 };
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 200,
-    backgroundColor: '#CCCCCC', // Placeholder color for the image
+    backgroundColor: '#CCCCCC', 
     borderRadius: 24,
   },
   buttonResturantName: {

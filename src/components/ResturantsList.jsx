@@ -15,7 +15,6 @@ const RestaurantList = ({ Heading, }) => {
       .get("http://192.168.0.105:3000/restaurants")
       .then((res) => {
         setRestaurantData(res.data)
-        console.log(res.data);
 
       })
   }, [])

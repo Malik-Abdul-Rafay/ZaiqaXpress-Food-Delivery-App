@@ -6,7 +6,7 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 const _layout = () => {
   return (
-    <Tabs screenOptions={{
+    <Tabs initialRouteName='Home' screenOptions={{
       tabBarActiveTintColor: "#FF642F",
       tabBarInactiveTintColor: "gray",
       tabBarStyle: {
@@ -30,7 +30,6 @@ const _layout = () => {
       <Tabs.Screen
         name="(RestaurantsDetail)"
         options={{
-          // header: () => <RestaurantsScreenHeader />,
           headerShown: false,
           tabBarIcon: ({ focused, color }) => (
             <Ionicons name={focused ? "restaurant" : "restaurant-outline"} size={25} color={color} />
@@ -44,9 +43,9 @@ const _layout = () => {
         ),
       }} />
 <Tabs.Screen
-  name='Orders'
+  name='(Orders)'
   options={{
-    header: () => <BackHeader title={'Orders'} />,
+    header: () => <BackHeader title={'My Orders'} />,
     tabBarIcon: ({ focused, color }) => (
       <Ionicons name={focused ? "receipt" : "receipt-outline"} size={25} color={color} />
     ),

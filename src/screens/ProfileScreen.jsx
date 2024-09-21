@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router';
+import {router } from 'expo-router';
 import React, { useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -71,7 +71,7 @@ const menuItems = [
   { label: 'Personal Info', icon: 'person', color: '#FF6B6B', onclick: 'PersonalInfo' },
   { label: 'Addresses', icon: 'location-on', color: '#4ECDC4', onclick: 'Addresses' },
   { label: 'Cart', icon: 'shopping-cart', color: '#1A535C', onclick: 'Cart' },
-  { label: 'Favourite', icon: 'favorite', color: '#FF6B6B', onclick: 'Favourite' },
+  { label: 'My Orders', icon: 'receipt', color: '#FF6B6B', onclick: 'OrdersScreen' },
   { label: 'Notifications', icon: 'notifications', color: '#FF6B6B', onclick: 'Notifications' },
   { label: 'Payment Method', icon: 'credit-card', color: '#FFE66D', onclick: 'PaymentMethod' },
   { label: 'FAQs', icon: 'help', color: '#FF6B6B', onclick: 'FAQs' },

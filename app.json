@@ -6,11 +6,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F8D559"
     },
     "ios": {
       "supportsTablet": true
@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.malikabdulrafay.ZaiqaXpress"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,7 +37,11 @@
         }
       ],
       "expo-router"
-    ]
-
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1e90899e-6d36-4ff0-864c-90cc0fad9759"
+      }
+    }
   }
 }

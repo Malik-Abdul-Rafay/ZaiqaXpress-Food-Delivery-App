@@ -3,35 +3,14 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, Image, ScrollView 
 import Icon1 from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import { CartContext } from '../context/CartContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CartScreen() {
-  const [quantity, setQuantity] = useState(2);
   const [address, setAddress] = useState('2118 Thornridge Cir. Syracuse');
-  const { cartItem, removeItemFromCart, addItemToCart, lessQuantityFromCart } = useContext(CartContext);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { cartItem, setCartItem,removeItemFromCart, addItemToCart, lessQuantityFromCart } = useContext(CartContext);
   const totalAmount = cartItem.reduce((total, obj) => total + obj.quantity * obj.price, 0);
   const totalQuantity = cartItem.reduce((total, obj) => total + obj.quantity, 0);
 
-  useEffect(() => {
-    const saveCartItems = async () => {
-      if (isLoaded) {
-        await AsyncStorage.setItem("cartItems", JSON.stringify(cartItem));
-      }
-    };
-    saveCartItems();
-  }, [cartItem, isLoaded]);
 
-  useEffect(() => {
-    const loadCartItems = async () => {
-      const itemsFromStorage = await AsyncStorage.getItem("cartItems");
-      if (itemsFromStorage) {
-        setCartItems([...JSON.parse(itemsFromStorage)]);
-        setIsLoaded(true);
-      }
-    };
-    loadCartItems();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -118,7 +97,7 @@ const styles = StyleSheet.create({
   },
   cartItemContainer: {
     paddingTop: 12,
-    marginBottom: 240,
+    marginBottom: 280,
   },
   cartItem: {
     flexDirection: 'row',

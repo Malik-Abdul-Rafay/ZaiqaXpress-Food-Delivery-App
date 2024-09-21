@@ -1,10 +1,42 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const CartContext = createContext()
 
 function CartContextProvider({children}) {
     const [cartItem, setCartItem] = useState([])
+    const storeData = async (value) => {
+        try{
+          const jsonValue = JSON.stringify(value)
+          const saveItem = await AsyncStorage.setItem('cartItem', jsonValue)
+        }catch(err){
+        console.log(err);
+        }
+      }
+      const getData = async (value) => {
+        try{
+          const jsonValue = await AsyncStorage.getItem('cartItem')
+          return jsonValue != null ? JSON.parse(jsonValue): [];
+        }catch(err){
+        console.log(err);
+        }
+      }
+    
+      useEffect(()=>{
+        const loadCartData = async () => {
+          const storedCart = await getData();
+          if (storedCart) {
+            setCartItem(storedCart)
+          }
+        }
+        loadCartData()
+      },[])
+      useEffect(()=>{
+        storeData(cartItem)
+      },[cartItem])
+    
+    
 
     function addItemToCart(item){
         const arr = cartItem;
@@ -40,7 +72,7 @@ function CartContextProvider({children}) {
 
     return(
         <CartContext.Provider
-        value={{cartItem, addItemToCart, lessQuantityFromCart, removeItemFromCart, isItemAdded}}>
+    value={{cartItem, setCartItem, addItemToCart, lessQuantityFromCart, removeItemFromCart, isItemAdded}}>
             {children}
         </CartContext.Provider>
     )

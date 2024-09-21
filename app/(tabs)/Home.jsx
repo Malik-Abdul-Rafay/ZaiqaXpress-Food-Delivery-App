@@ -1,9 +1,9 @@
 import React from 'react'
-import App from '../../App'
+import HomeScreen from '../../src/screens/HomeScreen'
 
 const Home = () => {
   return (
-    <App />
+    <HomeScreen />
   )
 }
 

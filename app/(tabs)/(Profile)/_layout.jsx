@@ -20,6 +20,11 @@ export default function Layout() {
             header: () => <BackHeader title={"My Address"} />
         }}
       />
+      <Stack.Screen name="PaymentMethod"
+        options={{
+            header: () => <BackHeader title={"Payment Method"} />
+        }}
+      />
     </Stack>
   );
 }

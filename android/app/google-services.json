@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451824079699",
+    "project_id": "zaiqaxpress-7cfbb",
+    "storage_bucket": "zaiqaxpress-7cfbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451824079699:android:70e92efa72863eb64b47a6",
+        "android_client_info": {
+          "package_name": "com.malikabdulrafay.ZaiqaXpress"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBx3FcgRLoV-k5aA0Omd8DNOfMu71u0lMA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -39,7 +39,7 @@ const _layout = () => {
       <Tabs.Screen name='Cart' options={{
         header: () => <BackHeader title={'Cart'} />,
         tabBarIcon: ({ focused, color }) => (
-          <Ionicons name={focused ? "cart" : "cart-outline"} size={25} color={color} />
+          <Ionicons name={focused ? "cart" : "cart-outline"} size={28} color={color} />
         ),
       }} />
 <Tabs.Screen

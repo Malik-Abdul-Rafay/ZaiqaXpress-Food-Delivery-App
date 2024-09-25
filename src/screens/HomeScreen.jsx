@@ -6,6 +6,8 @@ import SearchBar from '../components/SearchBar'
 import CategorySelector from '../components/CategorySelector'
 
 
+
+
 const HomeScreen = () => {
   return (
     <ScrollView>

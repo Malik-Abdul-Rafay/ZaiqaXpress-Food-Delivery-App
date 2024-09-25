@@ -2,7 +2,6 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CategoryScreenHeader from '../components/CategoryScreenHeader'
 import ItemList from '../components/ItemList'
-import ItemData from '../../DummyData/ItemData'
 
 const CategorySelectorScreen = () => {
   return (

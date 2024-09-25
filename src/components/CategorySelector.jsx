@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import Animated, { Easing, useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
 import Icon1 from 'react-native-vector-icons/Entypo';
 
@@ -19,33 +19,24 @@ const CategorySelector = () => {
     { name: 'Ice Cream', icon: img_9 },
   ];
 
-  // Shared values for animation
+  // Shared value for opacity animation
   const opacity = useSharedValue(0);
-  const scale = useSharedValue(1);
 
   useFocusEffect(
     useCallback(() => {
-      // Fade in and scale up animation when the screen comes into focus
-      opacity.value = withSpring(1, { duration: 300, easing: Easing.inOut(Easing.ease) });
-      scale.value = withSpring(1.1, { duration: 300, easing: Easing.inOut(Easing.ease) }, () => {
-        scale.value = withSpring(1, { duration: 300, easing: Easing.inOut(Easing.ease) });
-      });
-    }, [opacity, scale])
+      // Fade in animation when the screen comes into focus
+      opacity.value = withTiming(1, { duration: 300, easing: Easing.inOut(Easing.ease) });
+    }, [opacity])
   );
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: opacity.value,
-      transform: [{ scale: scale.value }],
     };
   });
 
   const handlePress = (category) => {
     setSelectedCategory(category.name);
-    // Optionally trigger animation on press
-    scale.value = withSpring(1.1, { duration: 200, easing: Easing.inOut(Easing.ease) }, () => {
-      scale.value = withSpring(1, { duration: 200, easing: Easing.inOut(Easing.ease) });
-    });
   };
 
   const renderItem = ({ item, index }) => (

@@ -1,6 +1,7 @@
+import Loader from '../components/Loader';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { Link } from 'expo-router'; // Import Link for navigation
+import { Link } from 'expo-router';
 import Icon1 from 'react-native-vector-icons/Octicons';
 import Icon2 from 'react-native-vector-icons/Entypo';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,16 +9,31 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-na
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 
-const RestaurantList = ({ Heading, }) => {
-  const [restaurantData, setRestaurantData] = useState([])
+const RestaurantList = ({ Heading }) => {
+  const [restaurantData, setRestaurantData] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
+
   useEffect(() => {
     axios
       .get("http://192.168.0.105:3000/restaurants")
       .then((res) => {
-        setRestaurantData(res.data)
-
+        setRestaurantData(res.data);
+        setLoading(false); 
       })
-  }, [])
+      .catch((error) => {
+        console.error(error);
+        setLoading(false); 
+      });
+  }, []);
+
+  if (loading) {
+    return( 
+    <View style={styles.loader} >
+      <Loader />
+    </View>
+    )
+  }
+
   return (
     <View style={styles.RestaurantListContainer}>
       {Heading && (
@@ -39,7 +55,6 @@ const RestaurantList = ({ Heading, }) => {
   );
 };
 
-
 const AnimatedCard = ({ item, index }) => {
   const translateY = useSharedValue(30);
   const opacity = useSharedValue(0);
@@ -48,11 +63,10 @@ const AnimatedCard = ({ item, index }) => {
     React.useCallback(() => {
       translateY.value = 60;
       opacity.value = 0;
-      translateY.value = withTiming(0, { duration: 100 });
+      translateY.value = withTiming(0, { duration: 300 });
       opacity.value = withTiming(1, { duration: 400 });
     }, [])
   );
-
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -64,7 +78,6 @@ const AnimatedCard = ({ item, index }) => {
   return (
     <Animated.View style={[styles.card, animatedStyle]}>
       <Link href={`/(RestaurantsDetail)/${item.id}`} asChild>
-
         <TouchableOpacity style={styles.card} activeOpacity={0.8}>
           <Image source={{ uri: item.img }} style={styles.image} />
           <View style={styles.infoContainer}>
@@ -76,8 +89,6 @@ const AnimatedCard = ({ item, index }) => {
                 </Text>
               ))}
             </View>
-
-
             <View style={styles.iconRow}>
               <View style={styles.iconWithText}>
                 <Icon1 name="star" size={22} color="#FF642F" />
@@ -103,6 +114,9 @@ const styles = StyleSheet.create({
   RestaurantListContainer: {
     paddingHorizontal: 20,
     backgroundColor: '#fff',
+  },
+  loader:{
+    marginTop: 50
   },
   headerContainer: {
     flexDirection: 'row',

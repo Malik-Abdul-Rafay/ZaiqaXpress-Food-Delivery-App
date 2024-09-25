@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import Animated, { Easing, useSharedValue, useAnimatedStyle, withTiming, withRepeat } from 'react-native-reanimated';
 
-const TYPING_SPEED = 100; // Adjust speed here
+const TYPING_SPEED = 10; // Adjust speed here
 
 export default function Greeting() {
   const [displayedText, setDisplayedText] = useState('');
@@ -22,7 +22,7 @@ export default function Greeting() {
 
     // Cursor blinking effect
     cursorOpacity.value = withRepeat(
-      withTiming(0, { duration: 100, easing: Easing.linear }),
+      withTiming(0, { duration: 10, easing: Easing.linear }),
       -1,
       true
     );

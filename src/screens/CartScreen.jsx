@@ -20,13 +20,13 @@ export default function CartScreen() {
           {cartItem.length > 0 ? (
             cartItem.map((item) => (
               <View key={item.id} style={styles.cartItem}>
-                <Image source={{ uri: item.imageUri }} style={styles.imagePlaceholder} />
+                <Image source={{ uri: item.img }} style={styles.imagePlaceholder} />
                 <View style={styles.itemDetails}>
                   <Text style={styles.itemName}>{item.name}</Text>
                   <View style={styles.itemDetailsBottom}>
                     <View>
                       <Text style={styles.itemPrice}>₹ {item.price}</Text>
-                      <Text style={styles.itemSize}>{item.size}</Text>
+                      <Text style={styles.itemSize}>{item.size[1]}</Text>
                     </View>
 
                     <View style={styles.quantityControl}>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   quantityControl: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ECF0F4',
+    backgroundColor: '#FFF',
     padding: 5,
     borderRadius: 50,
   },

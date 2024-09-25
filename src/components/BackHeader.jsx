@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 14,
     paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingTop: 60,
     paddingBottom:15,
     backgroundColor: '#fff',
         // Add shadow for iOS

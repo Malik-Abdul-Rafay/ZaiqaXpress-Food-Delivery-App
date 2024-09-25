@@ -6,6 +6,9 @@ import Icon3 from 'react-native-vector-icons/Entypo';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { CartContext } from '../context/CartContext';
+import Loader from '../components/Loader';
+
+
 
 const FoodDetailsScreen = () => {
   const [detailData, setDetailData] = useState(null);
@@ -13,6 +16,8 @@ const FoodDetailsScreen = () => {
   const [size, setSize] = useState('14');
   const [quantity, setQuantity] = useState(2);
   const {addItemToCart, isItemAdded,lessQuantityFromCart} = useContext(CartContext);
+  const [loading, setLoading] = useState(true); // Loading state
+
   
 
   // Animation values
@@ -26,8 +31,12 @@ const FoodDetailsScreen = () => {
       try {
         const res = await axios.get(`http://192.168.0.105:4000/items/${id}`);
         setDetailData(res.data);
+        setLoading(false); 
+
       } catch (err) {
         console.log("Error Fetching Data", err);
+        setLoading(false); 
+
       }
     };
 
@@ -57,7 +66,13 @@ const FoodDetailsScreen = () => {
     }).start();
   }, [fadeAnim, slideInAnim, slideUpAnim]);
 
-  if (!detailData) return <Text>Loading...</Text>;
+  if (loading) {
+    return( 
+    <View style={styles.loader} >
+      <Loader />
+    </View>
+    )
+  }
 
   const { name, price, description, rating, delivery_fee, delivery_time, size: sizes, ingredients, img, restaurant } = detailData;
 
@@ -150,6 +165,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  loader:{
+    marginTop: 50
+  },
   imageContainer: {
     paddingHorizontal: 20,
     paddingTop: 10,
@@ -231,12 +249,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems:'center',
     justifyContent: 'center',
-    width: 40,
-    height: 40,
     borderWidth: 1,
     borderColor: '#CCCCCC',
-    borderRadius: 50,
+    borderRadius: 10,
     marginRight: 8,
+    paddingHorizontal:8,
+    paddingVertical:8
   },
   sizeButtonActive: {
     backgroundColor: '#FF642F',

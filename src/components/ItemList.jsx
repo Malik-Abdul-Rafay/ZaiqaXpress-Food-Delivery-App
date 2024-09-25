@@ -1,15 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import Icon1 from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { useFocusEffect } from 'expo-router';
+import Loader from '../components/Loader';
+
 
 const ItemList = ({ Heading }) => {
   const {id} = useLocalSearchParams();
   const router = useRouter();
   const [itemData, setItemData] = useState([]);
+  const [loading, setLoading] = useState(true); 
+
 
   useFocusEffect(
     useCallback(() => {
@@ -17,21 +20,25 @@ const ItemList = ({ Heading }) => {
       const fetchData = async () => {
         try {
           const res = await axios.get(`http://192.168.0.105:3000/restaurants/${id}`);
+          setLoading(false); 
           if (isActive) {
             setItemData(res.data.items); 
           }
+            
         } catch (error) {
           console.log('Error fetching data:', error);
+        setLoading(false); 
+
         }
       };
   
       fetchData();
   
       return () => {
-        isActive = false; // Cleanup when screen loses focus or unmounts
-        setItemData([]);  // Clear data when screen is no longer focused
+        isActive = false; 
+        setItemData([]);  
       };
-    }, [id]) // Dependency array with id
+    }, [id]) 
   );
   
   const handleItemClick = (item) => {
@@ -42,6 +49,14 @@ const ItemList = ({ Heading }) => {
       },
     });
   };
+
+  if (loading) {
+    return( 
+    <View style={styles.loader} >
+      <Loader />
+    </View>
+    )
+  }
 
   return (
     <View style={styles.popularSection}>
@@ -84,6 +99,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: '#fff',
     paddingBottom: 20,
+  },
+  loader:{
+    marginTop: 50
   },
   popularHeader: {
     flexDirection: 'row',

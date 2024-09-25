@@ -14,8 +14,8 @@ const OnboardingScreen = () => {
   // Define the animated styles
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      opacity: withTiming(opacity.value, { duration: 500 }),
-      transform: [{ translateX: withTiming(translateX.value, { duration: 500 }) }],
+      opacity: withTiming(opacity.value, { duration: 300 }),
+      transform: [{ translateX: withTiming(translateX.value, { duration: 300 }) }],
     };
   });
 

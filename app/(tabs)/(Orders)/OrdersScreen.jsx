@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native';
 
 const ongoingOrders = [
-  { id: '162432', restaurant: 'Pizza Hut', price: '$35.25', items: '03 Items', type: 'Food' },
-  { id: '242432', restaurant: 'McDonald', price: '$40.15', items: '02 Items', type: 'Drink' },
-  { id: '240112', restaurant: 'Starbucks', price: '$10.20', items: '01 Item', type: 'Drink' },
+  { id: '1', restaurant: 'Sushi World', price: '$200', items: '06 pieces', type: 'Food', name: 'California Roll', img: 'https://th.bing.com/th/id/OIP.1cLgPgf1fsrjZBTKoCNKWAHaEO?w=1344&h=768&rs=1&pid=ImgDetMain' },
+  { id: '2', restaurant: 'Sushi World', price: '$250', items: '06 pieces', type: 'Food', name: 'Tuna Sashimi', img: 'https://i.pinimg.com/originals/6f/c1/6b/6fc16bbebbb8121a86f12895a6177e95.jpg' },
+  { id: '3', restaurant: 'Sushi World', price: '$80', items: 'Small', type: 'Drink', name: 'Miso Soup', img: 'https://flannerys.com.au/wp-content/uploads/2017/06/500x500_misosoup-300x300.jpg' },
 ];
 
 const historyOrders = [
-  { id: '162432', restaurant: 'Pizza Hut', price: '$35.25', items: '03 Items', status: 'Completed', type: 'Food' },
-  { id: '242432', restaurant: 'McDonald', price: '$40.15', items: '02 Items', status: 'Completed', type: 'Drink' },
-  { id: '240112', restaurant: 'Starbucks', price: '$10.20', items: '01 Item', status: 'Canceled', type: 'Drink' },
+  { id: '1', restaurant: 'Sushi World', price: '$150', items: '05 pieces', status: 'Completed', type: 'Food', name: 'Tempura', img: 'https://th.bing.com/th/id/OIP.M_h6combStO3kuYG4tTcJgAAAA?rs=1&pid=ImgDetMain' },
+  { id: '2', restaurant: 'Sushi World', price: '$90', items: 'Small', status: 'Completed', type: 'Food', name: 'Edamame', img: 'https://th.bing.com/th/id/OIP.zMSyMjsm4DPPHc06H-fg6AAAAA?rs=1&pid=ImgDetMain' },
 ];
+
 
 const MyOrdersScreen = () => {
   const [tab, setTab] = useState('ongoing');
@@ -20,10 +20,10 @@ const MyOrdersScreen = () => {
     <View style={styles.orderCard}>
       <Text style={styles.orderType}>{item.type}</Text>
       <View style={styles.detailContainer}>
-      <View style={styles.placeholder} />
+      <Image  source={{uri:item.img}}  style={styles.placeholder} />
       <View style={styles.orderDetails}>
         <View>
-          <Text style={styles.orderTitle}>{item.restaurant}</Text>
+          <Text style={styles.orderTitle}>{item.name}</Text>
           <View style={styles.priceItemContainer}>
           <Text style={styles.orderPrice}>{item.price}</Text>
           <Text style={styles.orderPrice}>|</Text>
@@ -48,10 +48,10 @@ const MyOrdersScreen = () => {
     <View style={styles.orderCard}>
       <Text style={styles.orderType}>{item.type}</Text>
       <View style={styles.detailContainer}>
-      <View style={styles.placeholder} />
+      <Image source={{uri:item.img}} style={styles.placeholder} />
       <View style={styles.orderDetails}>
         <View>
-          <Text style={styles.orderTitle}>{item.restaurant}</Text>
+          <Text style={styles.orderTitle}>{item.name}</Text>
           <View style={styles.priceItemContainer}>
           <Text style={styles.orderPrice}>{item.price}</Text>
           <Text style={styles.orderPrice}>|</Text>
